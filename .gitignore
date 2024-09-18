@@ -1,1 +1,6 @@
-/build/
+# Exclude everything
+/*
+
+# But not these folders
+!/main/
+!/.idea/
