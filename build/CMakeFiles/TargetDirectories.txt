@@ -388,7 +388,6 @@ C:/Users/devin/Documents/Fidet/esp_clion/recirculationBasicHydrophonics/build/es
 C:/Users/devin/Documents/Fidet/esp_clion/recirculationBasicHydrophonics/build/esp-idf/newlib/port/CMakeFiles/install/local.dir
 C:/Users/devin/Documents/Fidet/esp_clion/recirculationBasicHydrophonics/build/esp-idf/newlib/port/CMakeFiles/install/strip.dir
 C:/Users/devin/Documents/Fidet/esp_clion/recirculationBasicHydrophonics/build/esp-idf/cxx/CMakeFiles/__idf_cxx.dir
-C:/Users/devin/Documents/Fidet/esp_clion/recirculationBasicHydrophonics/build/esp-idf/cxx/CMakeFiles/libgcc_cxx.dir
 C:/Users/devin/Documents/Fidet/esp_clion/recirculationBasicHydrophonics/build/esp-idf/cxx/CMakeFiles/edit_cache.dir
 C:/Users/devin/Documents/Fidet/esp_clion/recirculationBasicHydrophonics/build/esp-idf/cxx/CMakeFiles/rebuild_cache.dir
 C:/Users/devin/Documents/Fidet/esp_clion/recirculationBasicHydrophonics/build/esp-idf/cxx/CMakeFiles/list_install_components.dir

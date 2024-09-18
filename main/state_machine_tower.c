@@ -33,7 +33,7 @@ _Noreturn void state_machine_tower_task(void *param) {
           current_state = STATE_SESSION_CHECK;
           break;
         case STATE_SESSION_CHECK:
-          current_state = (state_dto.arg_in) ? STATE_START_NEW_SESSION : STATE_ON_PERIOD_CHECKING_STATE;
+          current_state = (state_dto.arg_in==0) ? STATE_START_NEW_SESSION : STATE_ON_PERIOD_CHECKING_STATE;
           break;
         case STATE_START_NEW_SESSION:
           current_state = STATE_END_TOWER;
@@ -45,7 +45,7 @@ _Noreturn void state_machine_tower_task(void *param) {
           current_state = STATE_OFF_PERIOD_CHECKING_STATE;
           break;
         case STATE_OFF_PERIOD_CHECKING_STATE:
-          current_state = (!state_dto.arg_in) ? STATE_NO_OP :STATE_SESSION_CLEAR ;
+          current_state = (state_dto.arg_in) ? STATE_NO_OP :STATE_SESSION_CLEAR ;
           break;
         case STATE_SESSION_CLEAR | STATE_NO_OP | STATE_ERROR_TOWER:
           current_state = STATE_END_TOWER;

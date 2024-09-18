@@ -6,6 +6,9 @@
 #include "freertos/task.h"
 #include "freertos/timers.h"
 #include "state_machine_tower.h"
+#include "nvs_flash.h"
+#include "wifi_manager.h"
+#include "mqtt_manager.h"
 
 xl9535_t xl9535_dev;
 pcf8575_t pcf_dev;
@@ -20,7 +23,7 @@ static int task_counter = 0;
 
 
 // Timer callback function to create new tasks
-void timer_callback(TimerHandle_t xTimer) {
+void timer_callback_main_recirculation(TimerHandle_t xTimer) {
   // Increment the task counter
   task_counter++;
 
@@ -43,7 +46,7 @@ void timer_callback(TimerHandle_t xTimer) {
 
 
 // Timer callback function to create new tasks
-void timer_callback1(TimerHandle_t xTimer) {
+void timer_callback_tower_recirculation(TimerHandle_t xTimer) {
   // Increment the task counter
   task_counter++;
 
@@ -64,9 +67,55 @@ void timer_callback1(TimerHandle_t xTimer) {
   }
 }
 
-void app_main(void) {
+void start_main_recirculation_timer(){
+  // Create a software timer for main recirculation
+  TimerHandle_t task_creation_timer = xTimerCreate(
+      "TaskCreationTimerForMainRecirculation",        // Timer name
+      pdMS_TO_TICKS(1200000),       // Timer period (20 minute)
+      pdTRUE,                     // Auto-reload
+      0,                          // Timer ID (not used)
+      timer_callback_main_recirculation              // Timer callback function
+  );
 
+  if (task_creation_timer == NULL) {
+    printf("Failed to create main recirculation timer.\n");
+    return;
+  }
 
+  // Start the timer
+  if (xTimerStart(task_creation_timer, 0) != pdPASS) {
+    printf("Failed to start main recirculation timer.\n");
+  }
+
+  // Initial creation of a task (optional)
+  timer_callback_main_recirculation(NULL);
+}
+
+void start_tower_recirculation_timer(){
+  // Create a software timer for tower recirculation
+  TimerHandle_t task_creation_timer1 = xTimerCreate(
+      "TaskCreationTimerForTowerRecirculation",        // Timer name
+      pdMS_TO_TICKS(120000),       // Timer period (2 minute)
+      pdTRUE,                     // Auto-reload
+      0,                          // Timer ID (not used)
+      timer_callback_tower_recirculation              // Timer callback function
+  );
+
+  if (task_creation_timer1 == NULL) {
+    printf("Failed to create tower recirculation timer.\n");
+    return;
+  }
+
+  // Start the timer
+  if (xTimerStart(task_creation_timer1, 0) != pdPASS) {
+    printf("Failed to start tower recirculation timer.\n");
+  }
+
+  // Initial creation of a task (optional)
+  timer_callback_tower_recirculation(NULL);
+}
+
+void hardware_init(){
   // Initialize I2C
   i2c_port_t i2c_port = I2C_NUM_0;
   i2c_config_t i2c_conf = {
@@ -98,66 +147,21 @@ void app_main(void) {
   xl9535_set_pin_output(&xl9535_dev, 5, false);
   xl9535_set_pin_output(&xl9535_dev, 6, false);
   xl9535_set_pin_output(&xl9535_dev, 7, false);
+}
 
-//  printf("Starting state machine...\n");
-//  xTaskCreate(state_machine_task, "state_machine_task", 4096, NULL, 5, NULL);
+void app_main(void) {
 
-//
-  // Create a software timer
-  TimerHandle_t task_creation_timer = xTimerCreate(
-      "TaskCreationTimer",        // Timer name
-      pdMS_TO_TICKS(1200000),       // Timer period (20 minute)
-      pdTRUE,                     // Auto-reload
-      0,                          // Timer ID (not used)
-      timer_callback              // Timer callback function
-  );
-
-  if (task_creation_timer == NULL) {
-    printf("Failed to create timer.\n");
-    return;
+  esp_err_t ret = nvs_flash_init();
+  if (ret == ESP_ERR_NVS_NO_FREE_PAGES || ret == ESP_ERR_NVS_NEW_VERSION_FOUND) {
+    ESP_ERROR_CHECK(nvs_flash_erase());
+    ret = nvs_flash_init();
   }
+  ESP_ERROR_CHECK(ret);
 
-  // Start the timer
-  if (xTimerStart(task_creation_timer, 0) != pdPASS) {
-    printf("Failed to start timer.\n");
-  }
-
-  // Initial creation of a task (optional)
-  timer_callback(NULL);
-
-
-  TimerHandle_t task_creation_timer1 = xTimerCreate(
-      "TaskCreationTimer1",        // Timer name
-      pdMS_TO_TICKS(120000),       // Timer period (2 minute)
-      pdTRUE,                     // Auto-reload
-      0,                          // Timer ID (not used)
-      timer_callback1              // Timer callback function
-  );
-
-  if (task_creation_timer1 == NULL) {
-    printf("Failed to create timer1.\n");
-    return;
-  }
-
-  // Start the timer
-  if (xTimerStart(task_creation_timer1, 0) != pdPASS) {
-    printf("Failed to start timer1.\n");
-  }
-
-  // Initial creation of a task (optional)
-  timer_callback1(NULL);
-
-
- // xTaskCreate(state_machine_tower_task, "state_machine_tower_task", 4096, NULL, 5, NULL);
-//  xl9535_set_pin_output(&xl9535_dev, TOWER_PUMP, PUMP_ON);
-//  while(1) {
-//    // Read from pin 10
-//    uint8_t pin_val;
-//    pcf8575_read_pin(&pcf_dev, 15, &pin_val);
-//
-//    printf("pin val : %d\n", pin_val);
-//    vTaskDelay(pdMS_TO_TICKS(100));
-//  }
+  wifi_init();
+  hardware_init();
+  start_main_recirculation_timer();
+  start_tower_recirculation_timer();
 
   while (1){
     vTaskDelay(pdMS_TO_TICKS(1000));

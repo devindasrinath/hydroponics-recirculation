@@ -1,7 +1,7 @@
 {
     "version":            "1",
     "project_name":       "recirculationBasicHydrophonics",
-    "project_version":    "1",
+    "project_version":    "f76a010-dirty",
     "project_path":       "C:/Users/devin/Documents/Fidet/esp_clion/recirculationBasicHydrophonics",
     "idf_path":           "C:/Espressif/frameworks/esp-idf-v4.4.6",
     "build_dir":          "C:/Users/devin/Documents/Fidet/esp_clion/recirculationBasicHydrophonics/build",
@@ -9,7 +9,7 @@
     "config_defaults":    "",
     "app_elf":            "recirculationBasicHydrophonics.elf",
     "app_bin":            "recirculationBasicHydrophonics.bin",
-    "git_revision":       "v4.4.6-1-gc9e32a8c8-dirty",
+    "git_revision":       "v4.4.6",
     "target":             "esp32",
     "rev":                "0",
     "min_rev":            "0",
@@ -848,7 +848,7 @@
             "managed_reqs": [],
             "managed_priv_reqs": [],
             "file": "C:/Users/devin/Documents/Fidet/esp_clion/recirculationBasicHydrophonics/build/esp-idf/main/libmain.a",
-            "sources": [ "C:/Users/devin/Documents/Fidet/esp_clion/recirculationBasicHydrophonics/main/recirculationBasicHydrophonics.c", "C:/Users/devin/Documents/Fidet/esp_clion/recirculationBasicHydrophonics/main/constants.h", "C:/Users/devin/Documents/Fidet/esp_clion/recirculationBasicHydrophonics/main/xl9535.h", "C:/Users/devin/Documents/Fidet/esp_clion/recirculationBasicHydrophonics/main/xl9535.c", "C:/Users/devin/Documents/Fidet/esp_clion/recirculationBasicHydrophonics/main/pcf8575.h", "C:/Users/devin/Documents/Fidet/esp_clion/recirculationBasicHydrophonics/main/pcf8575.c", "C:/Users/devin/Documents/Fidet/esp_clion/recirculationBasicHydrophonics/main/state_functions.c", "C:/Users/devin/Documents/Fidet/esp_clion/recirculationBasicHydrophonics/main/state_functions.h", "C:/Users/devin/Documents/Fidet/esp_clion/recirculationBasicHydrophonics/main/state_machine.c", "C:/Users/devin/Documents/Fidet/esp_clion/recirculationBasicHydrophonics/main/state_machine.h", "C:/Users/devin/Documents/Fidet/esp_clion/recirculationBasicHydrophonics/main/state_functions_tower.c", "C:/Users/devin/Documents/Fidet/esp_clion/recirculationBasicHydrophonics/main/state_functions_tower.h", "C:/Users/devin/Documents/Fidet/esp_clion/recirculationBasicHydrophonics/main/state_machine_tower.c", "C:/Users/devin/Documents/Fidet/esp_clion/recirculationBasicHydrophonics/main/state_machine_tower.h" ],
+            "sources": [ "C:/Users/devin/Documents/Fidet/esp_clion/recirculationBasicHydrophonics/main/recirculationBasicHydrophonics.c", "C:/Users/devin/Documents/Fidet/esp_clion/recirculationBasicHydrophonics/main/constants.h", "C:/Users/devin/Documents/Fidet/esp_clion/recirculationBasicHydrophonics/main/xl9535.h", "C:/Users/devin/Documents/Fidet/esp_clion/recirculationBasicHydrophonics/main/xl9535.c", "C:/Users/devin/Documents/Fidet/esp_clion/recirculationBasicHydrophonics/main/pcf8575.h", "C:/Users/devin/Documents/Fidet/esp_clion/recirculationBasicHydrophonics/main/pcf8575.c", "C:/Users/devin/Documents/Fidet/esp_clion/recirculationBasicHydrophonics/main/state_functions.c", "C:/Users/devin/Documents/Fidet/esp_clion/recirculationBasicHydrophonics/main/state_functions.h", "C:/Users/devin/Documents/Fidet/esp_clion/recirculationBasicHydrophonics/main/state_machine.c", "C:/Users/devin/Documents/Fidet/esp_clion/recirculationBasicHydrophonics/main/state_machine.h", "C:/Users/devin/Documents/Fidet/esp_clion/recirculationBasicHydrophonics/main/state_functions_tower.c", "C:/Users/devin/Documents/Fidet/esp_clion/recirculationBasicHydrophonics/main/state_functions_tower.h", "C:/Users/devin/Documents/Fidet/esp_clion/recirculationBasicHydrophonics/main/state_machine_tower.c", "C:/Users/devin/Documents/Fidet/esp_clion/recirculationBasicHydrophonics/main/state_machine_tower.h", "C:/Users/devin/Documents/Fidet/esp_clion/recirculationBasicHydrophonics/main/wifi_manager.c", "C:/Users/devin/Documents/Fidet/esp_clion/recirculationBasicHydrophonics/main/wifi_manager.h", "C:/Users/devin/Documents/Fidet/esp_clion/recirculationBasicHydrophonics/main/mqtt_manager.h", "C:/Users/devin/Documents/Fidet/esp_clion/recirculationBasicHydrophonics/main/mqtt_manager.c" ],
             "include_dirs": [ "." ]
         },
         "mbedtls": {

@@ -21,6 +21,7 @@
 
 #define TOWER_LEVEL_PIN 15
 
+
 typedef struct {
   uint8_t state;
   esp_err_t error;
