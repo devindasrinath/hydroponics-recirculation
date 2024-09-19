@@ -113,6 +113,7 @@ void correction_state(state_dto_t *state_dto) {
 }
 
 void end_state(state_dto_t *state_dto) {
+  xSemaphoreGive(binarySemaphore);
   ESP_LOGI(TAG, "Process Completed");
   is_first_time(STATE_END, 0)==1?esp_mqtt_client_publish(client, "/topic/main_recirculation", "Process Completed", 0, 0, 0):0;
   state_dto->state = STATE_END;

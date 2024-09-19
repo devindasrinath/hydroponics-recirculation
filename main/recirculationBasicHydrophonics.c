@@ -13,7 +13,8 @@
 xl9535_t xl9535_dev;
 pcf8575_t pcf_dev;
 
-
+SemaphoreHandle_t binarySemaphore;
+TaskHandle_t main_recirculation_task_handle = NULL;
 
 #define TASK_STACK_SIZE 4096
 #define TASK_PRIORITY 5
@@ -24,6 +25,28 @@ static int task_counter = 0;
 
 // Timer callback function to create new tasks
 void timer_callback_main_recirculation(TimerHandle_t xTimer) {
+
+  //if previous main task is not completed yet : shut down the system
+  if(xSemaphoreTake(binarySemaphore, 0) == pdFALSE){
+
+    vTaskDelete(main_recirculation_task_handle);
+    main_recirculation_task_handle = NULL;
+    //down the system
+    xl9535_set_pin_output(&xl9535_dev, 0, false);
+    xl9535_set_pin_output(&xl9535_dev, 1, false);
+    xl9535_set_pin_output(&xl9535_dev, 2, false);
+    xl9535_set_pin_output(&xl9535_dev, 3, false);
+    xl9535_set_pin_output(&xl9535_dev, 4, false);
+    xl9535_set_pin_output(&xl9535_dev, 5, false);
+    xl9535_set_pin_output(&xl9535_dev, 6, false);
+    xl9535_set_pin_output(&xl9535_dev, 7, false);
+
+    return;
+
+  } else{
+    main_recirculation_task_handle = NULL;
+  }
+
   // Increment the task counter
   task_counter++;
 
@@ -34,7 +57,7 @@ void timer_callback_main_recirculation(TimerHandle_t xTimer) {
       TASK_STACK_SIZE,           // Stack size
       NULL, // Parameter (task ID)
       TASK_PRIORITY,             // Task priority
-      NULL       // Task handle (optional)
+      &main_recirculation_task_handle       // Task handle (optional)
   );
 
   if (result == pdPASS) {
@@ -150,6 +173,9 @@ void hardware_init(){
 }
 
 void app_main(void) {
+
+  binarySemaphore = xSemaphoreCreateBinary();
+  xSemaphoreGive(binarySemaphore);
 
   esp_err_t ret = nvs_flash_init();
   if (ret == ESP_ERR_NVS_NO_FREE_PAGES || ret == ESP_ERR_NVS_NEW_VERSION_FOUND) {
