@@ -23,7 +23,6 @@ typedef enum {
   STATE_ERROR  // Additional state to handle errors
 } state_t;
 
-extern SemaphoreHandle_t binarySemaphore;
 
 // Function prototype for the state machine task
 _Noreturn void state_machine_task(void *param);

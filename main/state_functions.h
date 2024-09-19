@@ -12,6 +12,7 @@ typedef void (*state_function_t)(state_dto_t *state_dto);
 // External device structs
 extern xl9535_t xl9535_dev;
 extern pcf8575_t pcf_dev;
+extern SemaphoreHandle_t binarySemaphore;
 
 // State function declarations
 void start_state(state_dto_t *state_dto);
