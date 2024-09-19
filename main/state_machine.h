@@ -3,7 +3,6 @@
 
 #include <esp_err.h>
 #include <stdint.h>
-#include <freertos/semphr.h>
 
 // Define the states for the state machine
 typedef enum {
