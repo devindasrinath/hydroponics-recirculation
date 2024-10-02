@@ -196,7 +196,7 @@ void app_main(void) {
   wifi_init();
   hardware_init();
   start_main_recirculation_timer();
-  start_tower_recirculation_timer();
+ // start_tower_recirculation_timer();
 
   while (1){
     vTaskDelay(pdMS_TO_TICKS(1000));
