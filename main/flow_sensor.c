@@ -18,7 +18,6 @@ static void IRAM_ATTR flow_sensor_isr_handler(void* arg) {
 static void flow_timer_callback(TimerHandle_t xTimer) {
   flow_frequency = pulse_count;  // Copy pulse count as flow frequency (Hz)
   pulse_count = 0;               // Reset pulse count for the next interval
-  ESP_LOGI(TAG, "Flow frequency: %d Hz", flow_frequency);
 }
 
 // Initialization function to configure the GPIO, ISR, and FreeRTOS timer
