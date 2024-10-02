@@ -6,6 +6,7 @@
 #include "constants.h"
 #include "state_machine.h"
 #include <freertos/semphr.h>
+#include "flow_sensor.h"
 
 // Declare the function pointers for state functions
 typedef void (*state_function_t)(state_dto_t *state_dto);

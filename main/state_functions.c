@@ -56,13 +56,16 @@ void turn_on_tower_flow_state(state_dto_t *state_dto) {
   if (state_dto->error != ESP_OK)
     return;
   state_dto->error = xl9535_set_pin_output(&xl9535_dev, TOWER_PUMP, PUMP_ON);
+
+  vTaskDelay(pdMS_TO_TICKS(60000));
 }
 
 void check_all_towers_filled_state(state_dto_t *state_dto) {
   ESP_LOGI(TAG, "Checking All Towers Filled");
   is_first_time(STATE_CHECK_ALL_TOWERS_FILLED, 0)==1?esp_mqtt_client_publish(client, "/topic/main_recirculation", "Checking All Towers Filled", 0, 0, 0):0;
   state_dto->state = STATE_CHECK_ALL_TOWERS_FILLED;
-  state_dto->error = pcf8575_read_pin(&pcf_dev, TOWER_LEVEL_PIN, &(state_dto->arg_in));
+  state_dto->error = ((float)get_flow_frequency()<10);
+
 }
 
 void turn_off_tower_flow_state(state_dto_t *state_dto) {
