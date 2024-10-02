@@ -95,7 +95,7 @@ void start_main_recirculation_timer(){
   // Create a software timer for main recirculation
   TimerHandle_t task_creation_timer = xTimerCreate(
       "TaskCreationTimerForMainRecirculation",        // Timer name
-      pdMS_TO_TICKS(1200000),       // Timer period (20 minute)
+      pdMS_TO_TICKS(1800000),       // Timer period (20 minute)
       pdTRUE,                     // Auto-reload
       0,                          // Timer ID (not used)
       timer_callback_main_recirculation              // Timer callback function
