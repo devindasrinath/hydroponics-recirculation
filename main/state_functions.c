@@ -64,7 +64,9 @@ void check_all_towers_filled_state(state_dto_t *state_dto) {
   ESP_LOGI(TAG, "Checking All Towers Filled");
   is_first_time(STATE_CHECK_ALL_TOWERS_FILLED, 0)==1?esp_mqtt_client_publish(client, "/topic/main_recirculation", "Checking All Towers Filled", 0, 0, 0):0;
   state_dto->state = STATE_CHECK_ALL_TOWERS_FILLED;
-  state_dto->error = ((float)get_flow_frequency()<10);
+  uint32_t flow_freq = get_flow_frequency();
+  state_dto->error = (flow_freq<10);
+  ESP_LOGI(TAG, "Flow frequency: %d Hz", flow_freq);
 
 }
 
