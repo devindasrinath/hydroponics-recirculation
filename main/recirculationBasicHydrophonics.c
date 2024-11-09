@@ -20,9 +20,6 @@ TaskHandle_t main_recirculation_task_handle = NULL;
 #define TASK_STACK_SIZE 4096
 #define TASK_PRIORITY 5
 
-// Counter for created tasks (optional)
-static int task_counter = 0;
-
 
 // Timer callback function to create new tasks
 void timer_callback_main_recirculation(TimerHandle_t xTimer) {
@@ -48,12 +45,9 @@ void timer_callback_main_recirculation(TimerHandle_t xTimer) {
     main_recirculation_task_handle = NULL;
   }
 
-  // Increment the task counter
-  task_counter++;
-
   // Create a new task with a unique ID
   BaseType_t result = xTaskCreate(
-      state_machine_task,               // Task function
+      main_recirculation_task,               // Task function
       "created_task",            // Task name
       TASK_STACK_SIZE,           // Stack size
       NULL, // Parameter (task ID)
@@ -62,22 +56,20 @@ void timer_callback_main_recirculation(TimerHandle_t xTimer) {
   );
 
   if (result == pdPASS) {
-    printf("Created Task %d\n", task_counter);
+    printf("Created new main recirculation task\n");
   } else {
-    printf("Failed to create Task %d\n", task_counter);
+    printf("Failed to create new main recirculation task\n");
   }
 }
 
 
 // Timer callback function to create new tasks
 void timer_callback_tower_recirculation(TimerHandle_t xTimer) {
-  // Increment the task counter
-  task_counter++;
 
   // Create a new task with a unique ID
   BaseType_t result = xTaskCreate(
-      state_machine_tower_task,               // Task function
-      "created_task1",            // Task name
+      tower_inner_circulation_task,               // Task function
+      "tower_inner_recirculation_task",            // Task name
       TASK_STACK_SIZE,           // Stack size
       NULL, // Parameter (task ID)
       TASK_PRIORITY,             // Task priority
@@ -85,9 +77,9 @@ void timer_callback_tower_recirculation(TimerHandle_t xTimer) {
   );
 
   if (result == pdPASS) {
-    printf("Created Task1 %d\n", task_counter);
+    printf("Created new tower inner circulation task\n");
   } else {
-    printf("Failed to create Task1 %d\n", task_counter);
+    printf("Failed to create new tower inner circulation task\n");
   }
 }
 
@@ -117,21 +109,21 @@ void start_main_recirculation_timer(){
 
 void start_tower_recirculation_timer(){
   // Create a software timer for tower recirculation
-  TimerHandle_t task_creation_timer1 = xTimerCreate(
+  TimerHandle_t tower_timer = xTimerCreate(
       "TaskCreationTimerForTowerRecirculation",        // Timer name
-      pdMS_TO_TICKS(120000),       // Timer period (2 minute)
+      pdMS_TO_TICKS(60000),       // Timer period (2 minute)
       pdTRUE,                     // Auto-reload
       0,                          // Timer ID (not used)
       timer_callback_tower_recirculation              // Timer callback function
   );
 
-  if (task_creation_timer1 == NULL) {
+  if (tower_timer == NULL) {
     printf("Failed to create tower recirculation timer.\n");
     return;
   }
 
   // Start the timer
-  if (xTimerStart(task_creation_timer1, 0) != pdPASS) {
+  if (xTimerStart(tower_timer, 0) != pdPASS) {
     printf("Failed to start tower recirculation timer.\n");
   }
 
@@ -161,8 +153,11 @@ void hardware_init(){
   xl9535_configure_pin_direction(&xl9535_dev, MAIN_TANK_PUMP, false);
   xl9535_configure_pin_direction(&xl9535_dev, TOWER_VALVE, false);
   xl9535_configure_pin_direction(&xl9535_dev, TOWER_PUMP, false);
+
+  // Inner circulation pin config
   xl9535_configure_pin_direction(&xl9535_dev, TOWER_INNER_PUMP, false);
 
+  // reset all pins
   xl9535_set_pin_output(&xl9535_dev, 0, false);
   xl9535_set_pin_output(&xl9535_dev, 1, false);
   xl9535_set_pin_output(&xl9535_dev, 2, false);
@@ -174,7 +169,7 @@ void hardware_init(){
 
   flow_sensor_config_t config = {
       .flow_sensor_pin = GPIO_NUM_13,        // Set the GPIO pin connected to the sensor
-      .pulse_to_liters_factor = 7.5         // Conversion factor for your sensor
+      .pulse_to_liters_factor = 7.5         // Conversion factor for sensor
   };
 
   // Initialize the flow sensor with the provided configuration
@@ -186,17 +181,18 @@ void app_main(void) {
   binarySemaphore = xSemaphoreCreateBinary();
   xSemaphoreGive(binarySemaphore);
 
-  esp_err_t ret = nvs_flash_init();
-  if (ret == ESP_ERR_NVS_NO_FREE_PAGES || ret == ESP_ERR_NVS_NEW_VERSION_FOUND) {
-    ESP_ERROR_CHECK(nvs_flash_erase());
-    ret = nvs_flash_init();
-  }
-  ESP_ERROR_CHECK(ret);
+//  esp_err_t ret = nvs_flash_init();
+//  if (ret == ESP_ERR_NVS_NO_FREE_PAGES || ret == ESP_ERR_NVS_NEW_VERSION_FOUND) {
+//    ESP_ERROR_CHECK(nvs_flash_erase());
+//    ret = nvs_flash_init();
+//  }
+//  ESP_ERROR_CHECK(ret);
 
-  wifi_init();
+//  wifi_init();
+
   hardware_init();
   start_main_recirculation_timer();
- // start_tower_recirculation_timer();
+  //start_tower_recirculation_timer();
 
   while (1){
     vTaskDelay(pdMS_TO_TICKS(1000));

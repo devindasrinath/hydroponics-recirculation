@@ -1,5 +1,5 @@
 // State machine logic
-_Noreturn void state_machine_task(void *pvParameters) {
+_Noreturn void main_recircultaion_task(void *pvParameters) {
   current_state= STATE_WAIT_1_MINUTE;
   while (1) {
     switch (current_state) {

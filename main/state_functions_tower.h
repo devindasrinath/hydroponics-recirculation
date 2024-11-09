@@ -14,7 +14,6 @@ extern xl9535_t xl9535_dev;
 extern pcf8575_t pcf_dev;
 
 typedef struct {
-  bool session_state;
   uint8_t count;
   uint8_t on_count;
   uint8_t off_count;
@@ -22,12 +21,11 @@ typedef struct {
 
 // State function declarations
 void start_tower_state(state_dto_t *state_dto);
-void session_check_state(state_dto_t *state_dto);
+void get_session_type_state(state_dto_t *state_dto);
 void start_new_session_state(state_dto_t *state_dto);
-void on_period_checking_state(state_dto_t *state_dto);
 void no_op_state(state_dto_t *state_dto);
 void tower_off_state(state_dto_t *state_dto);
-void off_period_checking_state(state_dto_t *state_dto);
+void tower_update_state(state_dto_t *state_dto);
 void session_clear_state(state_dto_t *state_dto);
 void end_tower_state(state_dto_t *state_dto);
 void error_tower_state(state_dto_t *state_dto);

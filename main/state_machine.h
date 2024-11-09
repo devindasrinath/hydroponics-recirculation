@@ -4,6 +4,11 @@
 #include <esp_err.h>
 #include <stdint.h>
 
+#define MAIN_TANK_FILLED_UNTIL_MAX 0
+#define ALL_TOWERS_FILLED 1
+#define MAIN_TANK_MIN_LEVEL_DROPPED 0
+#define MAIN_TANK_FILLED_UNTIL_MID 0
+
 // Define the states for the state machine
 typedef enum {
   STATE_START,
@@ -19,11 +24,12 @@ typedef enum {
   STATE_STOP_REFILL_MAIN_TANK,
   STATE_CORRECTION,
   STATE_END,
-  STATE_ERROR  // Additional state to handle errors
+  STATE_ERROR,
+  STATE_SYSTEM_SHUTDOWN
 } state_t;
 
 
 // Function prototype for the state machine task
-_Noreturn void state_machine_task(void *param);
+_Noreturn void main_recirculation_task(void *param);
 
 #endif  // STATE_MACHINE_H

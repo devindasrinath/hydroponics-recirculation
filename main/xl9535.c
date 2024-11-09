@@ -54,11 +54,11 @@ esp_err_t xl9535_init(xl9535_t *dev, i2c_port_t i2c_port, uint8_t i2c_address) {
   uint8_t reg_data = 0;
   esp_err_t ret = xl9535_read_register(dev, XL9535_REGISTER_CONFIG_0, &reg_data);
 
-  if (ret == ESP_OK) {
-    ESP_LOGI(TAG, "XL9535 device initialized successfully");
-  } else {
-    ESP_LOGE(TAG, "Failed to initialize XL9535 device");
-  }
+//  if (ret == ESP_OK) {
+//    ESP_LOGI(TAG, "XL9535 device initialized successfully");
+//  } else {
+//    ESP_LOGE(TAG, "Failed to initialize XL9535 device");
+//  }
 
   return ret;
 }
@@ -78,11 +78,11 @@ esp_err_t xl9535_write_register(xl9535_t *dev, uint8_t reg_addr, uint8_t value) 
   uint8_t data[2] = {reg_addr, value};  // First byte is the register address, second byte is the value
   esp_err_t ret = i2c_master_write_to_device(dev->i2c_port, dev->i2c_address, data, sizeof(data), pdMS_TO_TICKS(1000));
 
-  if (ret == ESP_OK) {
-    ESP_LOGI(TAG, "Wrote 0x%02X to register 0x%02X", value, reg_addr);
-  } else {
-    ESP_LOGE(TAG, "Failed to write to register 0x%02X", reg_addr);
-  }
+//  if (ret == ESP_OK) {
+//    ESP_LOGI(TAG, "Wrote 0x%02X to register 0x%02X", value, reg_addr);
+//  } else {
+//    ESP_LOGE(TAG, "Failed to write to register 0x%02X", reg_addr);
+//  }
 
   return ret;
 }
@@ -101,11 +101,11 @@ esp_err_t xl9535_write_register(xl9535_t *dev, uint8_t reg_addr, uint8_t value) 
 esp_err_t xl9535_read_register(xl9535_t *dev, uint8_t reg_addr, uint8_t *value) {
   esp_err_t ret = i2c_master_write_read_device(dev->i2c_port, dev->i2c_address, &reg_addr, 1, value, 1, pdMS_TO_TICKS(1000));
 
-  if (ret == ESP_OK) {
-    ESP_LOGI(TAG, "Read 0x%02X from register 0x%02X", *value, reg_addr);
-  } else {
-    ESP_LOGE(TAG, "Failed to read from register 0x%02X", reg_addr);
-  }
+//  if (ret == ESP_OK) {
+//    ESP_LOGI(TAG, "Read 0x%02X from register 0x%02X", *value, reg_addr);
+//  } else {
+//    ESP_LOGE(TAG, "Failed to read from register 0x%02X", reg_addr);
+//  }
 
   return ret;
 }

@@ -31,5 +31,6 @@ void stop_refill_main_tank_state(state_dto_t *state_dto);
 void correction_state(state_dto_t *state_dto);
 void end_state(state_dto_t *state_dto);
 void error_state(state_dto_t *state_dto);
+void shutdown_state(state_dto_t *state_dto);
 
 #endif  // STATE_FUNCTIONS_H

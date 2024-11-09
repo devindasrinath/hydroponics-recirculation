@@ -18,11 +18,12 @@ static state_function_t state_functions[] = {
     stop_refill_main_tank_state,
     correction_state,
     end_state,
-    error_state
+    error_state,
+    shutdown_state
 };
 
 // State machine task that runs the state transitions
-_Noreturn void state_machine_task(void *param) {
+_Noreturn void main_recirculation_task(void *param) {
   uint8_t current_state = STATE_START;
   state_dto_t state_dto;
   state_dto.state = STATE_START;
@@ -42,7 +43,7 @@ _Noreturn void state_machine_task(void *param) {
           current_state = STATE_CHECK_MAIN_TANK_MAX;
           break;
         case STATE_CHECK_MAIN_TANK_MAX:
-          current_state = (!state_dto.arg_in) ? STATE_TURN_OFF_MAIN_TANK_FLOW : STATE_CHECK_MAIN_TANK_MAX;
+          current_state = (state_dto.arg_in==MAIN_TANK_FILLED_UNTIL_MAX) ? STATE_TURN_OFF_MAIN_TANK_FLOW : STATE_CHECK_MAIN_TANK_MAX;
           break;
         case STATE_TURN_OFF_MAIN_TANK_FLOW:
           current_state = STATE_TURN_ON_TOWER_FLOW;
@@ -51,27 +52,31 @@ _Noreturn void state_machine_task(void *param) {
           current_state = STATE_CHECK_ALL_TOWERS_FILLED;
           break;
         case STATE_CHECK_ALL_TOWERS_FILLED:
-          current_state = (state_dto.arg_in) ? STATE_TURN_OFF_TOWER_FLOW : STATE_CHECK_ALL_TOWERS_FILLED;
+          current_state = (state_dto.arg_in==ALL_TOWERS_FILLED) ? STATE_TURN_OFF_TOWER_FLOW : STATE_CHECK_ALL_TOWERS_FILLED;
           break;
         case STATE_TURN_OFF_TOWER_FLOW:
           current_state = STATE_CHECK_MAIN_TANK_MIN;
           break;
         case STATE_CHECK_MAIN_TANK_MIN:
-          current_state = (!state_dto.arg_in) ? STATE_CORRECTION :STATE_START_REFILL_MAIN_TANK ;
+          current_state = (state_dto.arg_in==MAIN_TANK_MIN_LEVEL_DROPPED) ? STATE_CORRECTION :STATE_START_REFILL_MAIN_TANK ;
           break;
         case STATE_START_REFILL_MAIN_TANK:
           current_state = STATE_CHECK_MAIN_TANK_MID;
           break;
         case STATE_CHECK_MAIN_TANK_MID:
-          current_state = (!state_dto.arg_in) ? STATE_STOP_REFILL_MAIN_TANK : STATE_CHECK_MAIN_TANK_MID;
+          current_state = (state_dto.arg_in==MAIN_TANK_FILLED_UNTIL_MID) ? STATE_STOP_REFILL_MAIN_TANK : STATE_SYSTEM_SHUTDOWN;
           break;
         case STATE_STOP_REFILL_MAIN_TANK:
           current_state = STATE_CORRECTION;
           break;
-        case STATE_CORRECTION | STATE_ERROR:
+        case STATE_CORRECTION:
           current_state = STATE_END;
           break;
+        case STATE_ERROR:
+          current_state = STATE_SYSTEM_SHUTDOWN;
+          break;
         case STATE_END:
+        case STATE_SYSTEM_SHUTDOWN :
           vTaskDelete(NULL);  // End the task
           break;
         default:
